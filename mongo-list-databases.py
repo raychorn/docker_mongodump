@@ -5,7 +5,6 @@ import json
 import traceback
 
 import types
-import dotenv
 
 import shutil
 
@@ -46,7 +45,7 @@ __verbose_command_line_option__ = '--verbose'
 
 is_verbose = any([str(arg).find(__verbose_command_line_option__) > -1 for arg in sys.argv])
 
-def get_logger(fpath=__file__, product='scheduler', logPath='logs', is_running_production=is_running_production()):
+def get_logger(fpath=__file__, product='list-databases', logPath='logs', is_running_production=is_running_production()):
     def get_stream_handler(streamformat="%(asctime)s:%(levelname)s -> %(message)s"):
         stream = logging.StreamHandler()
         stream.setLevel(logging.INFO if (not is_running_production) else logging.DEBUG)
@@ -94,14 +93,10 @@ def get_logger(fpath=__file__, product='scheduler', logPath='logs', is_running_p
     
     return logger
 
-logger = get_logger()
+LOGPATH = os.environ.get('LOGPATH')
+logger = get_logger(fpath=LOGPATH, product='list-databases')
 
 from pymongo.mongo_client import MongoClient
-
-fp_env = dotenv.find_dotenv()
-if (os.path.exists(fp_env)):
-    logger.info('fp_env: {}'.format(fp_env))
-    dotenv.load_dotenv(fp_env)
 
 is_not_none = lambda s:(s is not None)
 
@@ -117,11 +112,6 @@ def get_mongo_client(mongouri=None, db_name=None, username=None, password=None, 
 ############################################################################
 
 __env__ = {}
-__literals__ = os.environ.get('LITERALS', [])
-__literals__ = [__literals__] if (not isinstance(__literals__, list)) else __literals__
-for k,v in os.environ.items():
-    if (k.find('MONGO_') > -1):
-        __env__[k] = expandvars(v) if (k not in __literals__) else v
 
 __env__['MONGO_INITDB_DATABASE'] = os.environ.get('MONGO_INITDB_DATABASE')
 __env__['MONGO_URI'] = os.environ.get('MONGO_URI')
