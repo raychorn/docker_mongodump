@@ -191,8 +191,8 @@ for i in "${DBNAMES[@]}"; do
     echo "--uri $MONGO_URI"
     echo "--username $USERNAME"
     echo "--password $PASSWORD1"
-    rawurlencode "$args"; P1=${REPLY}
-    echo "--password $P1"
+    rawurlencode "$PASSWORD1"; P1=${REPLY}
+    echo "P1:$P1"
     echo "--uri $USERNAME:$P1@$MONGO_URI"
     echo "--db=$i"
     echo "--archive=$DESTDIR/mongodump-$i.gz"
