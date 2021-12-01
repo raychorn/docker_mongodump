@@ -133,8 +133,10 @@ for dbName in [name for name in client.list_database_names() if (name not in ign
         os.makedirs(_destfpath, exist_ok=True)
         collection = db.collName
         cursor = collection.find({})
+        docs = [doc for doc in cursor]
+        print('DEBUG: {}.{} -> len(docs) -> {}'.format(dbName, collName, len(docs)))
         with open('{}/{}.json'.format(_destfpath, collName), 'w') as file:
-            json.dump(json.loads(dumps([doc for doc in cursor])), file)
+            json.dump(json.loads(dumps(docs)), file)
 
 logger.info('Done.')
 
