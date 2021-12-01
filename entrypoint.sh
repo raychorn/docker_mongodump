@@ -164,8 +164,8 @@ echo "databases:$databases"
 IFS=',' read -ra DBNAMES <<< "$databases"
 for i in "${DBNAMES[@]}"; do
     echo "Database --> $i"
-    mongodump --uri "mongodb://mongodb1-10.web-service.org:27017,mongodb2-10.web-service.org:27017,mongodb3-10.web-service.org:27017/?replicaSet=rs0" \
-    --authenticationDatabase admin --username $USERNAME \
-    --db=$i \
-    --password $PASSWORD1 --oplog --archive=/mongodumps/$DIRNAME/mongodump-$i.gz
+    #mongodump --uri "mongodb://mongodb1-10.web-service.org:27017,mongodb2-10.web-service.org:27017,mongodb3-10.web-service.org:27017/?replicaSet=rs0" \
+    #--authenticationDatabase admin --username $USERNAME \
+    #--db=$i \
+    #--password $PASSWORD1 --oplog --archive=/mongodumps/$DIRNAME/mongodump-$i.gz
 done
