@@ -13,6 +13,8 @@ else
     echo "ERROR: Environment variables not found. So using env from the docker-compose."
 fi
 
+timedatectl set-timezone America/Denver
+
 if [ ! -d "$DEST" ]; then
     mkdir -p $DEST
 fi
@@ -21,12 +23,10 @@ PY=$(which python3.9)
 
 if [ ! -f "$PY" ]; then
     echo "Python 3.9 not found. Trying to install it."
-    add-apt-repository ppa:git-core/ppa -y
-    apt update -y
-    apt upgrade -y
-
-    add-apt-repository ppa:deadsnakes/ppa -y
-    apt install python3.9 python3.9-dev python3.9-venv -y
+    apt-get install software-properties-common -y
+    echo -ne '\n' | add-apt-repository ppa:deadsnakes/ppa
+    apt-get update -y
+    apt-get install python3.9 python3.9-dev python3.9-venv python3.9-distutils -y
 fi
 
 PY=$(which python3.9)
