@@ -129,18 +129,26 @@ from bson.json_util import dumps
 
 DESTDIR = sys.argv[1]
 
-for dbName in [name for name in client.list_database_names() if (name not in ignores)]:
-    _db = db(client, dbName)
-    for collName in _db.list_collection_names():
-        _destfpath = os.sep.join([DESTDIR, dbName])
-        os.makedirs(_destfpath, exist_ok=True)
-        collection = db_collection(client, dbName, collName)
-        num_items = collection.count_documents({})
-        cursor = collection.find({})
-        docs = [doc for doc in cursor]
-        print('DEBUG: {}.{} -> len(docs) -> {} of {}'.format(dbName, collName, len(docs), num_items))
-        with open('{}/{}.json'.format(_destfpath, collName), 'w') as file:
-            json.dump(json.loads(dumps(docs)), file)
+try:
+    for dbName in [name for name in client.list_database_names() if (name not in ignores)]:
+        _db = db(client, dbName)
+        for collName in _db.list_collection_names():
+            _destfpath = os.sep.join([DESTDIR, dbName])
+            os.makedirs(_destfpath, exist_ok=True)
+            collection = db_collection(client, dbName, collName)
+            num_items = collection.count_documents({})
+            cursor = collection.find({})
+            docs = [doc for doc in cursor]
+            print('DEBUG: {}.{} -> len(docs) -> {} of {}'.format(dbName, collName, len(docs), num_items))
+            with open('{}/{}.json'.format(_destfpath, collName), 'w') as file:
+                json.dump(json.loads(dumps(docs)), file)
+except Exception as ex:
+    extype, ex, tb = sys.exc_info()
+    formatted = traceback.format_exception_only(extype, ex)[-1]
+    if (logger):
+        logger.error(formatted)
+    else:
+        print(formatted)
 
 logger.info('Done.')
 
