@@ -83,6 +83,15 @@ echo "PIP3:$PIP3"
 
 VIRTUALENV=$(which virtualenv)
 
+if [[ ! -f $virtualenv ]]
+then
+    echo "15.1 virtualenv is missing. pip3:$pip3"
+    $PIP3 install virtualenv > /dev/null 2>&1
+    $PIP3 install --upgrade virtualenv > /dev/null 2>&1
+fi
+
+VIRTUALENV=$(which virtualenv)
+
 if [ ! -f "$VIRTUALENV" ]; then
     echo "ERROR: virtualenv not found. Please install it."
     sleep infinity
@@ -90,8 +99,23 @@ fi
 
 echo "VIRTUALENV:$VIRTUALENV"
 
+VENV=$ROOT/venv
+
+$VIRTUALENV --python $PY -v $VENV
+
+if [ ! -f "$VENV/bin/activate" ]; then
+    echo "ERROR: virtualenv not found. Please install it."
+    sleep infinity
+fi
+
+. $VENV/bin/activate
+
 DIRNAME=$(date +%m-%d-%y-%H-%M-%S)
 DESTDIR=$DEST/$DIRNAME
 mkdir -p $DESTDIR
+
+echo "Sleeping now."
+sleep infinity
+
 # mongodb://root:sisko%407660%24boo@mongodb1-10.web-service.org:27017,mongodb2-10.web-service.org:27017,mongodb3-10.web-service.org:27017/?replicaSet=rs0&authSource=admin
 #mongodump -h <your_database_host> -d <your_database_name> -u $USERNAME -p $PASSWORD -o $DEST
