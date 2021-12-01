@@ -10,8 +10,7 @@ if [ -f "$ENVPATH" ]; then
     export $(cat $ENVPATH | sed 's/#.*//g' | xargs)
     echo "Done importing environment variables."
 else
-    echo "ERROR: Environment variables not found. Please run the following command to generate them:"
-    sleep infinity
+    echo "ERROR: Environment variables not found. So using env from the docker-compose."
 fi
 
 if [ ! -d "$DEST" ]; then
