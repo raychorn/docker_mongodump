@@ -129,7 +129,14 @@ if [ -z "$PASSWORD1" ]; then
     sleep infinity
 fi
 
-mongo --uri "mongodb://mongodb1-10.web-service.org:27017,mongodb2-10.web-service.org:27017,mongodb3-10.web-service.org:27017/?replicaSet=rs0" \
+MONGOSH=$(which mongosh)
+
+if [ ! -f "$MONGOSH" ]; then
+    echo "ERROR: mongosh not found. Please install it."
+    sleep infinity
+fi
+
+MONGOSH --uri "mongodb://mongodb1-10.web-service.org:27017,mongodb2-10.web-service.org:27017,mongodb3-10.web-service.org:27017/?replicaSet=rs0" \
     --authenticationDatabase admin \
     --username $USERNAME \
     --password $PASSWORD1 \
