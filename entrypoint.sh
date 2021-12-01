@@ -110,12 +110,32 @@ fi
 
 . $VENV/bin/activate
 
+wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | apt-key add -
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-5.0.list
+apt-get update -y
+apt-get install -y mongodb-mongosh
+
 DIRNAME=$(date +%m-%d-%y-%H-%M-%S)
 DESTDIR=$DEST/$DIRNAME
 mkdir -p $DESTDIR
 
-echo "Sleeping now."
-sleep infinity
+if [ -z "$USERNAME" ]; then
+    echo "Cannot find USERNAME:$USERNAME."
+    sleep infinity
+fi
 
-# mongodb://root:sisko%407660%24boo@mongodb1-10.web-service.org:27017,mongodb2-10.web-service.org:27017,mongodb3-10.web-service.org:27017/?replicaSet=rs0&authSource=admin
-#mongodump -h <your_database_host> -d <your_database_name> -u $USERNAME -p $PASSWORD -o $DEST
+if [ -z "$PASSWORD1" ]; then
+    echo "Cannot find PASSWORD1:$PASSWORD1."
+    sleep infinity
+fi
+
+mongo --uri "mongodb://mongodb1-10.web-service.org:27017,mongodb2-10.web-service.org:27017,mongodb3-10.web-service.org:27017/?replicaSet=rs0" \
+    --authenticationDatabase admin \
+    --username $USERNAME \
+    --password $PASSWORD1 \
+    --quiet --eval  "printjson(db.adminCommand('listDatabases'))"
+
+#mongodump --uri "mongodb://mongodb1-10.web-service.org:27017,mongodb2-10.web-service.org:27017,mongodb3-10.web-service.org:27017/?replicaSet=rs0" \
+#  --authenticationDatabase admin --username $USERNAME \
+#  --db=<database> \
+#  --password $PASSWORD1 --oplog --archive=/mongodumps/$DIRNAME/.gz
