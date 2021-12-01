@@ -53,6 +53,28 @@ echo "PY:$PY"
 PIP3=$(which pip3.9)
 
 if [ ! -f "$PIP3" ]; then
+    echo "ERROR: Pip 3.9 not found. So installing it."
+    apt-get install wget -y
+    GETPIP=$ROOT/get-pip.py
+    wget https://bootstrap.pypa.io/get-pip.py -O $GETPIP
+    if [[ -f $GETPIP ]]
+    then
+        echo "10.2 Fetching pip3 from bootstrap."
+        $PY $GETPIP
+        export PATH=$LOCAL_BIN:$PATH
+        PIP3=$(which pip3.9)
+        if [[ -f $PIP3 ]]
+        then
+            echo "11. Upgrading setuptools"
+            setuptools="1"
+            $PIP3 install --upgrade setuptools > /dev/null 2>&1
+        fi
+    fi
+fi
+
+PIP3=$(which pip3.9)
+
+if [ ! -f "$PIP3" ]; then
     echo "ERROR: Pip 3.9 not found. Please install it."
     sleep infinity
 fi
