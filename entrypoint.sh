@@ -124,10 +124,14 @@ if [ -z "$USERNAME" ]; then
     sleep infinity
 fi
 
+echo "USERNAME:$USERNAME"
+
 if [ -z "$PASSWORD1" ]; then
     echo "Cannot find PASSWORD1:$PASSWORD1."
     sleep infinity
 fi
+
+echo "PASSWORD1:$PASSWORD1"
 
 MONGOSH=$(which mongosh)
 
