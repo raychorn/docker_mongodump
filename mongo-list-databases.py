@@ -16,8 +16,6 @@ from datetime import datetime
 
 from itertools import chain
 
-from expandvars import expandvars
-
 import numpy as np
 import pandas as pd
 
