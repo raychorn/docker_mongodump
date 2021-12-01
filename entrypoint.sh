@@ -20,6 +20,18 @@ fi
 PY=$(which python3.9)
 
 if [ ! -f "$PY" ]; then
+    echo "Python 3.9 not found. Trying to install it."
+    sudo add-apt-repository ppa:git-core/ppa -y
+    sudo apt update -y
+    sudo apt upgrade -y
+
+    sudo add-apt-repository ppa:deadsnakes/ppa -y
+    sudo apt install python3.9 python3.9-dev python3.9-venv -y
+fi
+
+PY=$(which python3.9)
+
+if [ ! -f "$PY" ]; then
     echo "ERROR: Python 3.9 not found. Please install it."
     sleep infinity
 fi
