@@ -136,11 +136,11 @@ if [ ! -f "$MONGOSH" ]; then
     sleep infinity
 fi
 
-MONGOSH --uri "mongodb://mongodb1-10.web-service.org:27017,mongodb2-10.web-service.org:27017,mongodb3-10.web-service.org:27017/?replicaSet=rs0" \
-    --authenticationDatabase admin \
-    --username $USERNAME \
-    --password $PASSWORD1 \
-    --quiet --eval  "printjson(db.adminCommand('listDatabases'))"
+#MONGOSH --uri "mongodb://mongodb1-10.web-service.org:27017,mongodb2-10.web-service.org:27017,mongodb3-10.web-service.org:27017/?replicaSet=rs0" \
+#    --authenticationDatabase admin \
+#    --username $USERNAME \
+#    --password $PASSWORD1 \
+#    --quiet --eval  "printjson(db.adminCommand('listDatabases'))"
 
 #mongodump --uri "mongodb://mongodb1-10.web-service.org:27017,mongodb2-10.web-service.org:27017,mongodb3-10.web-service.org:27017/?replicaSet=rs0" \
 #  --authenticationDatabase admin --username $USERNAME \
