@@ -2,6 +2,24 @@
 
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
+rawurlencode() {
+  local string="${1}"
+  local strlen=${#string}
+  local encoded=""
+  local pos c o
+
+  for (( pos=0 ; pos<strlen ; pos++ )); do
+     c=${string:$pos:1}
+     case "$c" in
+        [-_.~a-zA-Z0-9] ) o="${c}" ;;
+        * )               printf -v o '%%%02x' "'$c"
+     esac
+     encoded+="${o}"
+  done
+  echo "${encoded}"    # You can either set a return variable (FASTER) 
+  REPLY="${encoded}"   #+or echo the result (EASIER)... or both... :p
+}
+
 ENVPATH=$ROOT/.env
 echo "Environment file: $ENVPATH"
 
@@ -173,6 +191,9 @@ for i in "${DBNAMES[@]}"; do
     echo "--uri $MONGO_URI"
     echo "--username $USERNAME"
     echo "--password $PASSWORD1"
+    rawurlencode "$args"; P1=${REPLY}
+    echo "--password $P1"
+    echo "--uri $USERNAME:$P1@$MONGO_URI"
     echo "--db=$i"
     echo "--archive=$DESTDIR/mongodump-$i.gz"
     echo ""
