@@ -128,13 +128,13 @@ DESTDIR = sys.argv[1]
 
 for dbName in [name for name in client.list_database_names() if (name not in ignores)]:
     db = client[dbName]
-    for collName in db.collection_names():
+    for collName in db.list_collection_names():
         _destfpath = os.sep.join([DESTDIR, dbName])
         os.makedirs(_destfpath, exist_ok=True)
         collection = db.collName
         cursor = collection.find({})
         with open('{}/{}.json'.format(_destfpath, collName), 'w') as file:
-            json.dump(json.loads(dumps(cursor)), file)
+            json.dump(json.loads(dumps([doc for doc in cursor])), file)
 
 logger.info('Done.')
 
