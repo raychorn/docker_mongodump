@@ -87,7 +87,7 @@ def get_logger(fpath=__file__, product='list-databases', logPath='logs', is_runn
     return logger
 
 LOGPATH = os.environ.get('LOGPATH')
-print('*** LOGPATH: {}'.format(LOGPATH))
+#print('*** LOGPATH: {}'.format(LOGPATH))
 logger = get_logger(fpath=LOGPATH, product='list-databases')
 
 from pymongo.mongo_client import MongoClient
