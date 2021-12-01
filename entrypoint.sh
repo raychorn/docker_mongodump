@@ -15,6 +15,8 @@ fi
 
 timedatectl set-timezone America/Denver
 
+dpkg-reconfigure --frontend noninteractive tzdata
+
 if [ ! -d "$DEST" ]; then
     mkdir -p $DEST
 fi
