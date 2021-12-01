@@ -13,9 +13,19 @@ else
     echo "ERROR: Environment variables not found. So using env from the docker-compose."
 fi
 
-timedatectl set-timezone America/Denver
+export DEBIAN_FRONTEND=noninteractive;
+export DEBCONF_NONINTERACTIVE_SEEN=true;
+echo 'tzdata tzdata/Areas select America' > /tmp/preseed.cfg;
+echo 'tzdata tzdata/Zones/America select Denver' >> /tmp/preseed.cfg;
+debconf-set-selections /tmp/preseed.cfg
+rm -f /etc/timezone /etc/localtime
+apt-get update -qqy
+apt-get install -qqy --no-install-recommends tzdata
 
-dpkg-reconfigure --frontend noninteractive tzdata
+if [ -z "$DEST" ]; then
+    echo "Cannot find DEST:$DEST"
+    sleep infinity
+fi
 
 if [ ! -d "$DEST" ]; then
     mkdir -p $DEST
