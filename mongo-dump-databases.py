@@ -118,6 +118,9 @@ try:
 except:
     sys.exit()
 
+db = lambda cl,n:cl.get_database(n)
+db_collection = lambda cl,n,c:db(cl,n).get_collection(c)
+
 logger.info(str(client))
 
 ignores = ['local', 'admin', 'config', 'test']
@@ -127,11 +130,11 @@ from bson.json_util import dumps
 DESTDIR = sys.argv[1]
 
 for dbName in [name for name in client.list_database_names() if (name not in ignores)]:
-    db = client[dbName]
-    for collName in db.list_collection_names():
+    _db = db(client, dbName)
+    for collName in _db.list_collection_names():
         _destfpath = os.sep.join([DESTDIR, dbName])
         os.makedirs(_destfpath, exist_ok=True)
-        collection = db.collName
+        collection = db_collection(client, dbName, collName)
         num_items = collection.count_documents({})
         cursor = collection.find({})
         docs = [doc for doc in cursor]
