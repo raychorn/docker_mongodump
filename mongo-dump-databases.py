@@ -111,7 +111,7 @@ __env__['MONGO_INITDB_DATABASE'] = os.environ.get('MONGO_INITDB_DATABASE')
 __env__['MONGO_URI'] = os.environ.get('MONGO_URI')
 __env__['MONGO_INITDB_USERNAME'] = os.environ.get("MONGO_INITDB_ROOT_USERNAME")
 __env__['MONGO_INITDB_PASSWORD'] = os.environ.get("MONGO_INITDB_ROOT_PASSWORD")
-__env__['MONGO_AUTH_MECHANISM'] ='SCRAM-SHA-1'
+__env__['MONGO_AUTH_MECHANISM'] = os.environ.get('MONGO_AUTH_MECHANISM')
 
 try:
     client = get_mongo_client(mongouri=__env__.get('MONGO_URI'), db_name=__env__.get('MONGO_INITDB_DATABASE'), username=__env__.get('MONGO_INITDB_USERNAME'), password=__env__.get('MONGO_INITDB_PASSWORD'), authMechanism=__env__.get('MONGO_AUTH_MECHANISM'))
