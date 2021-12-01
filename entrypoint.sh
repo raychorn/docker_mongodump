@@ -119,26 +119,46 @@ DIRNAME=$(date +%m-%d-%y-%H-%M-%S)
 DESTDIR=$DEST/$DIRNAME
 mkdir -p $DESTDIR
 
-if [ -z "$USERNAME" ]; then
-    echo "Cannot find USERNAME:$USERNAME."
+if [ -z "$MONGO_INITDB_ROOT_USERNAME" ]; then
+    echo "Cannot find MONGO_INITDB_ROOT_USERNAME:$MONGO_INITDB_ROOT_USERNAME."
     sleep infinity
 fi
 
-echo "USERNAME:$USERNAME"
+echo "MONGO_INITDB_ROOT_USERNAME:$MONGO_INITDB_ROOT_USERNAME"
 
-if [ -z "$PASSWORD1" ]; then
-    echo "Cannot find PASSWORD1:$PASSWORD1."
+if [ -z "$MONGO_INITDB_ROOT_PASSWORD" ]; then
+    echo "Cannot find MONGO_INITDB_ROOT_PASSWORD:$MONGO_INITDB_ROOT_PASSWORD."
     sleep infinity
 fi
 
-echo "PASSWORD1:$PASSWORD1"
+echo "MONGO_INITDB_ROOT_PASSWORD:$MONGO_INITDB_ROOT_PASSWORD"
 
-MONGOSH=$(which mongosh)
-
-if [ ! -f "$MONGOSH" ]; then
-    echo "ERROR: mongosh not found. Please install it."
+if [ -z "$MONGO_INITDB_ROOT_PASSWORD2" ]; then
+    echo "Cannot find MONGO_INITDB_ROOT_PASSWORD2:$MONGO_INITDB_ROOT_PASSWORD2."
     sleep infinity
 fi
+
+echo "MONGO_INITDB_ROOT_PASSWORD2:$MONGO_INITDB_ROOT_PASSWORD2"
+
+if [ -z "$MONGO_INITDB_DATABASE" ]; then
+    echo "Cannot find MONGO_INITDB_DATABASE:$MONGO_INITDB_DATABASE."
+    sleep infinity
+fi
+
+echo "MONGO_INITDB_DATABASE:$MONGO_INITDB_DATABASE"
+
+pip install -r $ROOT/requirements.txt
+
+PYFILE=$ROOT/mongo-list-databases.py
+
+if [ ! -f "$PYFILE" ]; then
+    echo "ERROR: $PYFILE not found."
+    sleep infinity
+fi
+
+databases=$(python $PYFILE)
+
+echo "databases:$databases"
 
 #MONGOSH --uri "mongodb://mongodb1-10.web-service.org:27017,mongodb2-10.web-service.org:27017,mongodb3-10.web-service.org:27017/?replicaSet=rs0" \
 #    --authenticationDatabase admin \
