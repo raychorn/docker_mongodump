@@ -14,11 +14,6 @@ import logging
 import datetime as dt
 from datetime import datetime
 
-from itertools import chain
-
-import numpy as np
-import pandas as pd
-
 ############################################################################
 from logging.handlers import RotatingFileHandler
 
@@ -92,6 +87,7 @@ def get_logger(fpath=__file__, product='list-databases', logPath='logs', is_runn
     return logger
 
 LOGPATH = os.environ.get('LOGPATH')
+print('*** LOGPATH: {}'.format(LOGPATH))
 logger = get_logger(fpath=LOGPATH, product='list-databases')
 
 from pymongo.mongo_client import MongoClient
@@ -124,7 +120,9 @@ except:
 
 logger.info(str(client))
 
-print('{}'.format(','.join(client.list_database_names())))
+ignores = ['local', 'admin', 'config', 'test']
+
+print('{}'.format(','.join([dbName for dbName in client.list_database_names() if (dbName not in ignores)])))
 
 logger.info('Done.')
 

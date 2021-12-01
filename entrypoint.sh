@@ -158,13 +158,13 @@ fi
 
 databases=$(python $PYFILE)
 
+echo ""
 echo "databases:$databases"
 
-#MONGOSH --uri "mongodb://mongodb1-10.web-service.org:27017,mongodb2-10.web-service.org:27017,mongodb3-10.web-service.org:27017/?replicaSet=rs0" \
-#    --authenticationDatabase admin \
-#    --username $USERNAME \
-#    --password $PASSWORD1 \
-#    --quiet --eval  "printjson(db.adminCommand('listDatabases'))"
+IFS=',' read -ra DBNAMES <<< "$databases"
+for i in "${DBNAMES[@]}"; do
+    echo "Database --> $i"
+done
 
 #mongodump --uri "mongodb://mongodb1-10.web-service.org:27017,mongodb2-10.web-service.org:27017,mongodb3-10.web-service.org:27017/?replicaSet=rs0" \
 #  --authenticationDatabase admin --username $USERNAME \
