@@ -162,16 +162,22 @@ echo ""
 echo "databases:$databases"
 
 USERNAME=$MONGO_INITDB_ROOT_USERNAME
-PASSWORD=$MONGO_INITDB_ROOT_PASSWORD
-PASSWORD2=$MONGO_INITDB_ROOT_PASSWORD2
+PASSWORD1=$MONGO_INITDB_ROOT_PASSWORD
+PASSWORD2=$MONGO_INITDB_ROOT_PASSWORD
 
 echo "DESTDIR:$DESTDIR"
 
 IFS=',' read -ra DBNAMES <<< "$databases"
 for i in "${DBNAMES[@]}"; do
     echo "Database --> $i"
-    mongodump --uri "mongodb://mongodb1-10.web-service.org:27017,mongodb2-10.web-service.org:27017,mongodb3-10.web-service.org:27017/?replicaSet=rs0" \
-        --authenticationDatabase admin --username $USERNAME \
-        --db=$i \
-        --password $PASSWORD1 --oplog --archive=$DESTDIR/mongodump-$i.gz
+    echo "--uri $MONGO_URI"
+    echo "--username $USERNAME"
+    echo "--password $PASSWORD1"
+    echo "--db=$i"
+    echo "--archive=$DESTDIR/mongodump-$i.gz"
+    echo ""
+    #mongodump --uri "$MONGO_URI" \
+    #    --authenticationDatabase admin --username $USERNAME \
+    #    --db=$i \
+    #    --password $PASSWORD1 --oplog --archive=$DESTDIR/mongodump-$i.gz
 done
