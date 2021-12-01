@@ -167,15 +167,38 @@ echo "MONGO_INITDB_DATABASE:$MONGO_INITDB_DATABASE"
 
 pip install -r $ROOT/requirements.txt
 
-pip install bson
-
-PYFILE=$ROOT/mongo-dump-databases.py
+PYFILE=$ROOT/mongo-list-databases.py
 
 if [ ! -f "$PYFILE" ]; then
     echo "ERROR: $PYFILE not found."
     sleep infinity
 fi
 
-python $PYFILE $DESTDIR
+databases=$(python $PYFILE)
 
-echo "Done."
+echo ""
+echo "databases:$databases"
+
+USERNAME=$MONGO_INITDB_ROOT_USERNAME
+PASSWORD1=$MONGO_INITDB_ROOT_PASSWORD
+PASSWORD2=$MONGO_INITDB_ROOT_PASSWORD
+
+echo "DESTDIR:$DESTDIR"
+
+IFS=',' read -ra DBNAMES <<< "$databases"
+for i in "${DBNAMES[@]}"; do
+    echo "Database --> $i"
+    echo "--uri $MONGO_URI"
+    echo "--username $USERNAME"
+    echo "--password $PASSWORD1"
+    rawurlencode "$PASSWORD1"; P1=${REPLY}
+    echo "P1:$P1"
+    echo "--uri $USERNAME:$P1@$MONGO_URI"
+    echo "--db=$i"
+    echo "--archive=$DESTDIR/mongodump-$i.gz"
+    echo ""
+    #mongodump --uri "$MONGO_URI" \
+    #    --authenticationDatabase admin --username $USERNAME \
+    #    --db=$i \
+    #    --password $PASSWORD1 --oplog --archive=$DESTDIR/mongodump-$i.gz
+done
