@@ -167,10 +167,6 @@ echo "MONGO_INITDB_DATABASE:$MONGO_INITDB_DATABASE"
 
 pip install -r $ROOT/requirements.txt
 
-pip uninstall bson
-pip uninstall pymongo
-pip install pymongo
-
 PYFILE=$ROOT/mongo-dump-databases.py
 
 if [ ! -f "$PYFILE" ]; then
